@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IC24 Media Talk - Admin Command</title>
+    <link rel="stylesheet" href="/dashboard.css" />
+  </head>
+  <body>
+    <div class="admin-layout">
+      <aside class="sidebar">
+        <div class="sidebar-brand">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+            ></path>
+          </svg>
+          <span>GC Admin</span>
+        </div>
+        <nav class="sidebar-nav">
+          <button class="nav-btn active" data-target="sec-overview">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Overview
+          </button>
+          <button class="nav-btn" data-target="sec-users">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Users
+            <span
+              id="navPendingBadge"
+              class="nav-badge"
+              style="display: none"
+            ></span>
+          </button>
+          <button class="nav-btn" data-target="sec-channels">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+            Channels
+          </button>
+          <button class="nav-btn" data-target="sec-devices">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+              <rect x="9" y="9" width="6" height="6"></rect>
+              <line x1="9" y1="1" x2="9" y2="4"></line>
+              <line x1="15" y1="1" x2="15" y2="4"></line>
+              <line x1="9" y1="20" x2="9" y2="23"></line>
+              <line x1="15" y1="20" x2="15" y2="23"></line>
+              <line x1="20" y1="9" x2="23" y2="9"></line>
+              <line x1="20" y1="14" x2="23" y2="14"></line>
+              <line x1="1" y1="9" x2="4" y2="9"></line>
+              <line x1="1" y1="14" x2="4" y2="14"></line>
+            </svg>
+            Devices
+          </button>
+          <button class="nav-btn" data-target="sec-comms">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"
+              ></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="22"></line>
+            </svg>
+            Comms & Logs
+          </button>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div class="header-title">Command Center</div>
+          <div class="admin-status">
+            <span id="serverTime" class="sys-time"></span>
+            <div class="status-indicator online" id="serverStatusBadge">
+              <span class="status-dot"></span> Server Online
+            </div>
+            <span id="reconnectBadge" class="reconnect-badge hidden"
+              >Reconnecting...</span
+            >
+          </div>
+        </header>
+
+        <div class="dashboard-sections">
+          <section id="sec-overview" class="dashboard-section active">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value" id="totalUsers">0</div>
+                <div class="stat-label">Active Users</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="pendingCount">0</div>
+                <div class="stat-label">Pending Users</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="totalChannels">8</div>
+                <div class="stat-label">Active Channels</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="totalMessages">0</div>
+                <div class="stat-label">Total Messages</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h2 class="panel-title">Global Controls</h2>
+              <div class="global-controls">
+                <button id="listenAllBtn" class="action-btn blue">
+                  Listen to All Channels
+                </button>
+                <button id="stopListenAllBtn" class="action-btn gray">
+                  Stop All Listening
+                </button>
+                <button id="muteAllBtn" class="action-btn red">
+                  Mute All Channels
+                </button>
+                <button id="unmuteAllBtn" class="action-btn green">
+                  Unmute All Channels
+                </button>
+                <button id="refreshUsersBtn" class="action-btn outline">
+                  Refresh Directory
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section id="sec-users" class="dashboard-section">
+            <div class="panel">
+              <h2 class="panel-title">
+                Pending Authorizations
+                <span id="pendingCountBadge" class="count-badge"></span>
+              </h2>
+              <div id="pendingUsersList" class="data-list">
+                <div class="empty-state">No pending requests</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h2 class="panel-title">Active Personnel</h2>
+              <div id="usersList" class="data-list">
+                <div class="empty-state">No active users</div>
+              </div>
+            </div>
+          </section>
+
+          <section id="sec-channels" class="dashboard-section">
+            <div class="panel">
+              <h2 class="panel-title">Channel Configuration</h2>
+              <div id="channelsList" class="channels-grid"></div>
+            </div>
+          </section>
+
+          <section id="sec-devices" class="dashboard-section">
+            <div class="panel">
+              <h2 class="panel-title">Known Hardware Registry</h2>
+              <div id="knownDevicesList" class="devices-grid">
+                <div class="empty-state">No known devices yet</div>
+              </div>
+            </div>
+          </section>
+
+          <section id="sec-comms" class="dashboard-section">
+            <div class="split-grid">
+              <div class="panel">
+                <h2 class="panel-title">System Broadcast</h2>
+                <div class="broadcast-targets" id="broadcastTargets">
+                  <label class="cb-label"
+                    ><input type="checkbox" id="broadcastAll" checked />
+                    <span class="cb-box"></span> All</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="1"
+                    />
+                    <span class="cb-box"></span> CH-1</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="2"
+                    />
+                    <span class="cb-box"></span> CH-2</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="3"
+                    />
+                    <span class="cb-box"></span> CH-3</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="4"
+                    />
+                    <span class="cb-box"></span> CH-4</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="5"
+                    />
+                    <span class="cb-box"></span> CH-5</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="6"
+                    />
+                    <span class="cb-box"></span> CH-6</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="7"
+                    />
+                    <span class="cb-box"></span> CH-7</label
+                  >
+                  <label class="cb-label"
+                    ><input
+                      type="checkbox"
+                      class="broadcast-channel"
+                      value="8"
+                    />
+                    <span class="cb-box"></span> CH-8</label
+                  >
+                </div>
+
+                <div class="input-group">
+                  <input
+                    type="text"
+                    id="broadcastMessage"
+                    placeholder="Enter transmission text..."
+                  />
+                  <button id="sendBroadcastBtn" class="action-btn blue">
+                    Transmit Text
+                  </button>
+                  <button id="sendVibrateBtn" class="action-btn outline">
+                    Send Nudge
+                  </button>
+                </div>
+
+                <div class="audio-broadcast-controls">
+                  <button id="startAudioBroadcastBtn" class="action-btn red">
+                    Engage Audio Broadcast
+                  </button>
+                  <button
+                    id="stopAudioBroadcastBtn"
+                    class="action-btn gray"
+                    disabled
+                  >
+                    Cease Broadcast
+                  </button>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h2 class="panel-title">Audio Monitor</h2>
+                <div id="audioMonitor" class="audio-monitor-box">
+                  <div class="monitor-status">Monitoring Idle</div>
+                </div>
+                <audio id="adminAudio" autoplay></audio>
+              </div>
+            </div>
+
+            <div class="panel mt-4">
+              <h2 class="panel-title">Global Comms Log</h2>
+              <div id="messageLog" class="message-log-container">
+                <div class="empty-state">No intercepted communications</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/dashboard.js"></script>
+  </body>
+</html>
