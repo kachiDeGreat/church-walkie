@@ -246,6 +246,11 @@ function connectToServer() {
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200]);
     }
+
+    document.body.classList.add("shake-screen");
+    setTimeout(() => document.body.classList.remove("shake-screen"), 500);
+    playNotificationPing();
+
     addSystemMessage(`Attention: ${data.username} sent a nudge!`, "alert");
   });
 
@@ -564,6 +569,30 @@ clearChatBtn.addEventListener("click", () => {
     chatMessagesDiv.innerHTML = '<div class="placeholder">Chat cleared</div>';
   }
 });
+
+function playNotificationPing() {
+  try {
+    if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === "suspended") audioContext.resume();
+
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, audioContext.currentTime); // High pitch
+    osc.frequency.exponentialRampToValueAtTime(440, audioContext.currentTime + 0.1);
+
+    gain.gain.setValueAtTime(0, audioContext.currentTime);
+    gain.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    osc.start();
+    osc.stop(audioContext.currentTime + 0.5);
+  } catch (e) {}
+}
 
 function setupWaveform() {
   waveformCanvas.width = waveformCanvas.clientWidth;
